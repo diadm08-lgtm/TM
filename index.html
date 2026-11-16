@@ -3,44 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Мой Тайм-менеджмент</title>
-    <!-- Подключаем скрипт Telegram Mini Apps -->
+    <title>Your Time Management</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --bg-color: var(--tg-theme-bg-color, #ffffff);
             --text-color: var(--tg-theme-text-color, #000000);
             --hint-color: var(--tg-theme-hint-color, #999999);
-            --button-color: var(--tg-theme-button-color, #2481cc);
+            --button-color: var(--tg-theme-button-color, #007aff);
             --button-text-color: var(--tg-theme-button-text-color, #ffffff);
             --secondary-bg: var(--tg-theme-secondary-bg-color, #f1f1f1);
+            --danger-color: #ff3b30;
+            --success-color: #34c759;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             box-sizing: border-box;
         }
 
-        h1 {
+        h1 { font-size: 22px; text-align: center; margin: 10px 0; }
+
+        /* Трекер энергии */
+        .energy-tracker {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            background: var(--secondary-bg);
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .energy-btn {
             font-size: 24px;
-            margin-top: 0;
-            margin-bottom: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: 0.2s;
+        }
+        .energy-btn.active { opacity: 1; transform: scale(1.2); }
+
+        /* Вкладки */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            background: var(--secondary-bg);
+            padding: 5px;
+            border-radius: 10px;
+        }
+        .tab {
+            flex: 1;
+            padding: 8px;
             text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--hint-color);
+        }
+        .tab.active {
+            background: var(--bg-color);
+            color: var(--text-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
+        /* Прогресс бар */
+        .progress-container {
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: var(--hint-color);
+        }
+        .progress-bar {
+            height: 6px;
+            background: var(--secondary-bg);
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--success-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Ввод */
         .input-container {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
-
         input[type="text"] {
             flex: 1;
             padding: 12px 15px;
@@ -51,138 +112,235 @@
             font-size: 16px;
             outline: none;
         }
-
-        input[type="text"]:focus {
-            border-color: var(--button-color);
+        .priority-toggle {
+            background: var(--secondary-bg);
+            border: 1px solid var(--hint-color);
+            border-radius: 10px;
+            padding: 0 15px;
+            font-size: 20px;
+            cursor: pointer;
         }
-
+        .priority-toggle.active {
+            background: var(--danger-color);
+            border-color: var(--danger-color);
+            color: white;
+        }
         button#add-btn {
             background-color: var(--button-color);
             color: var(--button-text-color);
             border: none;
             border-radius: 10px;
             padding: 0 20px;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 600;
             cursor: pointer;
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
+        /* Список задач */
+        ul { list-style: none; padding: 0; margin: 0; flex: 1; }
         li {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px;
+            padding: 12px 15px;
             background-color: var(--secondary-bg);
             border-radius: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             transition: 0.2s;
+            border-left: 4px solid transparent;
         }
-
-        .task-text {
-            flex: 1;
-            font-size: 16px;
-            word-break: break-word;
-            cursor: pointer;
-        }
-
-        li.completed .task-text {
-            text-decoration: line-through;
-            color: var(--hint-color);
-        }
+        li.important { border-left-color: var(--danger-color); }
+        
+        .task-text { flex: 1; font-size: 15px; word-break: break-word; cursor: pointer; }
+        li.completed .task-text { text-decoration: line-through; color: var(--hint-color); }
+        li.completed { border-left-color: transparent; }
 
         .delete-btn {
-            background: none;
-            border: none;
-            color: #ff3b30;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0 5px;
-            margin-left: 10px;
+            background: none; border: none; color: var(--danger-color);
+            font-size: 18px; cursor: pointer; padding: 0 5px; margin-left: 10px;
         }
 
-        .empty-state {
-            text-align: center;
+        /* Кнопка переноса */
+        .move-btn {
+            margin-top: 15px;
+            padding: 12px;
+            background: transparent;
+            border: 1px dashed var(--hint-color);
             color: var(--hint-color);
-            margin-top: 40px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
         }
+
+        .empty-state { text-align: center; color: var(--hint-color); margin-top: 30px; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <h1>Мои задачи</h1>
+    <h1>Мой день</h1>
 
+    <!-- Трекер энергии -->
+    <div class="energy-tracker" id="energy-tracker">
+        <button class="energy-btn" onclick="setEnergy(1)">😫</button>
+        <button class="energy-btn" onclick="setEnergy(2)">😐</button>
+        <button class="energy-btn" onclick="setEnergy(3)">🙂</button>
+        <button class="energy-btn" onclick="setEnergy(4)">😎</button>
+        <button class="energy-btn" onclick="setEnergy(5)">🚀</button>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('today')">На сегодня</div>
+        <div class="tab" onclick="switchTab('someday')">Когда-нибудь</div>
+    </div>
+
+    <!-- Прогресс -->
+    <div class="progress-container">
+        <span id="progress-text">Выполнено 0 из 0</span>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <!-- Ввод задачи -->
     <div class="input-container">
+        <button class="priority-toggle" id="priority-btn" onclick="togglePriority()" title="Сделать важной">🔥</button>
         <input type="text" id="task-input" placeholder="Что нужно сделать?">
         <button id="add-btn">+</button>
     </div>
 
-    <ul id="task-list">
-        <!-- Сюда будут добавляться задачи -->
-    </ul>
-    
-    <div id="empty-state" class="empty-state">
-        Пока нет задач. Добавьте первую! ✨
-    </div>
+    <!-- Список -->
+    <ul id="task-list"></ul>
+    <div id="empty-state" class="empty-state">Пока нет задач. Отдыхайте! ✨</div>
+
+    <!-- Кнопка переноса -->
+    <button class="move-btn" id="move-btn" onclick="moveUnfinished()">Перенести невыполненное на завтра</button>
 
     <script>
-        // Инициализация Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем на весь экран
-        tg.ready();  // Сообщаем Telegram, что приложение готово
+        tg.expand();
+        tg.ready();
 
+        // Состояние
+        let tasks = JSON.parse(localStorage.getItem('tg_tasks_v2')) || [];
+        let currentTab = 'today'; // 'today' или 'someday'
+        let isImportant = false;
+        
+        // Энергия
+        let energy = localStorage.getItem('tg_energy') || null;
+
+        // Элементы
         const taskInput = document.getElementById('task-input');
         const addBtn = document.getElementById('add-btn');
         const taskList = document.getElementById('task-list');
         const emptyState = document.getElementById('empty-state');
+        const progressText = document.getElementById('progress-text');
+        const progressFill = document.getElementById('progress-fill');
+        const priorityBtn = document.getElementById('priority-btn');
+        const moveBtn = document.getElementById('move-btn');
 
-        // Загружаем задачи из памяти Telegram (CloudStorage) или localStorage
-        let tasks = JSON.parse(localStorage.getItem('tg_tasks')) || [];
+        // Инициализация
+        function init() {
+            renderTasks();
+            renderEnergy();
+        }
 
+        // Переключение приоритета
+        function togglePriority() {
+            isImportant = !isImportant;
+            priorityBtn.classList.toggle('active', isImportant);
+        }
+
+        // Переключение вкладок
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderTasks();
+        }
+
+        // Установка энергии
+        function setEnergy(level) {
+            energy = level;
+            localStorage.setItem('tg_energy', level);
+            renderEnergy();
+            // Вибрация для отклика
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function renderEnergy() {
+            const btns = document.querySelectorAll('.energy-btn');
+            btns.forEach((btn, index) => {
+                btn.classList.toggle('active', (index + 1) == energy);
+            });
+        }
+
+        // Отрисовка задач
         function renderTasks() {
             taskList.innerHTML = '';
             
-            if (tasks.length === 0) {
+            // Фильтруем задачи по текущей вкладке
+            const filteredTasks = tasks.filter(t => t.tab === currentTab);
+            
+            if (filteredTasks.length === 0) {
                 emptyState.style.display = 'block';
+                moveBtn.style.display = currentTab === 'today' ? 'block' : 'none';
             } else {
                 emptyState.style.display = 'none';
             }
 
-            tasks.forEach((task, index) => {
+            filteredTasks.forEach((task, index) => {
+                // Находим реальный индекс задачи в общем массиве
+                const realIndex = tasks.findIndex(t => t.id === task.id);
+                
                 const li = document.createElement('li');
                 if (task.completed) li.classList.add('completed');
+                if (task.important) li.classList.add('important');
 
                 const span = document.createElement('span');
                 span.className = 'task-text';
                 span.textContent = task.text;
-                // Клик по тексту - отметить выполненным
-                span.onclick = () => toggleTask(index);
+                span.onclick = () => toggleTask(realIndex);
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'delete-btn';
                 deleteBtn.textContent = '✕';
-                // Клик по крестику - удалить
-                deleteBtn.onclick = () => deleteTask(index);
+                deleteBtn.onclick = () => deleteTask(realIndex);
 
                 li.appendChild(span);
                 li.appendChild(deleteBtn);
                 taskList.appendChild(li);
             });
+
+            updateProgress();
+        }
+
+        // Обновление прогресс-бара (считаем только задачи на сегодня)
+        function updateProgress() {
+            const todayTasks = tasks.filter(t => t.tab === 'today');
+            const completed = todayTasks.filter(t => t.completed).length;
+            const total = todayTasks.length;
+            
+            progressText.textContent = `Выполнено ${completed} из ${total}`;
+            const percent = total === 0 ? 0 : (completed / total) * 100;
+            progressFill.style.width = `${percent}%`;
         }
 
         function addTask() {
             const text = taskInput.value.trim();
             if (text) {
-                tasks.push({ text: text, completed: false });
+                tasks.push({ 
+                    id: Date.now().toString(),
+                    text: text, 
+                    completed: false,
+                    important: isImportant,
+                    tab: currentTab
+                });
                 taskInput.value = '';
+                isImportant = false;
+                priorityBtn.classList.remove('active');
                 saveTasks();
                 renderTasks();
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
             }
         }
 
@@ -190,6 +348,7 @@
             tasks[index].completed = !tasks[index].completed;
             saveTasks();
             renderTasks();
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
         function deleteTask(index) {
@@ -198,18 +357,40 @@
             renderTasks();
         }
 
-        function saveTasks() {
-            localStorage.setItem('tg_tasks', JSON.stringify(tasks));
+        // Перенос невыполненных задач на завтра (на вкладку "Когда-нибудь")
+        function moveUnfinished() {
+            let count = 0;
+            tasks.forEach(task => {
+                if (task.tab === 'today' && !task.completed) {
+                    task.tab = 'someday';
+                    count++;
+                }
+            });
+            
+            // Удаляем выполненные задачи из списка
+            tasks = tasks.filter(t => !(t.tab === 'today' && t.completed));
+            
+            saveTasks();
+            renderTasks();
+            
+            if (count > 0) {
+                tg.showAlert(`Перенесено задач: ${count}. Не забудьте про отдых!`);
+            } else {
+                tg.showAlert("Все задачи на сегодня выполнены! Отдыхайте 🎉");
+            }
         }
 
-        // Слушатели событий
+        function saveTasks() {
+            localStorage.setItem('tg_tasks_v2', JSON.stringify(tasks));
+        }
+
+        // Слушатели
         addBtn.addEventListener('click', addTask);
         taskInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') addTask();
         });
 
-        // Первый запуск
-        renderTasks();
+        init();
     </script>
 </body>
 </html>

@@ -6,17 +6,14 @@
     <title>Your Time Management</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* --- ОБЩИЕ НАСТРОЙКИ (СВЕТЛАЯ ТЕМА, МИНИМАЛИЗМ) --- */
         :root {
-            --bg-color: #f7f7f7; /* Светло-серый фон как на скрине */
+            --bg-color: #f7f7f7; 
             --text-color: #000000;
             --hint-color: #8e8e93;
-            --button-color: #000000; /* Черные кнопки */
+            --button-color: #000000; 
             --button-text-color: #ffffff;
-            --secondary-bg: #ffffff; /* Белые карточки */
-            --danger-color: #ff3b30;
-            --success-color: #34c759;
-            --border-radius: 24px; /* Сильное скругление */
+            --secondary-bg: #ffffff; 
+            --border-radius: 24px; 
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -33,14 +30,13 @@
             overflow: hidden;
         }
 
-        /* --- ЭКРАНЫ --- */
         .screen {
             display: none;
             flex-direction: column;
             padding: 20px;
             flex: 1;
             overflow-y: auto;
-            padding-bottom: 100px; /* Место для нижней панели */
+            padding-bottom: 100px;
             animation: fadeIn 0.3s ease;
         }
         .screen.active { display: flex; }
@@ -50,47 +46,14 @@
         h1 { font-size: 32px; font-weight: 800; margin: 10px 0 20px 0; letter-spacing: -1px; }
 
         /* --- СТАРТОВЫЙ ЭКРАН --- */
-        .start-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            text-align: center;
-        }
-        .start-title {
-            font-size: 36px;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 15px;
-            letter-spacing: -1px;
-        }
-        .start-subtitle {
-            color: var(--hint-color);
-            font-size: 16px;
-            margin-bottom: 40px;
-            max-width: 80%;
-        }
-        .start-btn {
-            background: var(--button-color);
-            color: var(--button-text-color);
-            border: none;
-            padding: 16px 32px;
-            border-radius: 30px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 80%;
-            transition: transform 0.1s;
-        }
+        .start-content { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; }
+        .start-title { font-size: 36px; font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -1px; }
+        .start-subtitle { color: var(--hint-color); font-size: 16px; margin-bottom: 40px; max-width: 80%; }
+        .start-btn { background: var(--button-color); color: var(--button-text-color); border: none; padding: 16px 32px; border-radius: 30px; font-size: 18px; font-weight: 600; cursor: pointer; width: 80%; transition: transform 0.1s; }
         .start-btn:active { transform: scale(0.95); }
 
-        /* --- ЭКРАН: ЗАДАЧИ --- */
-        .energy-tracker {
-            display: flex; justify-content: space-between; gap: 5px;
-            background: var(--secondary-bg); padding: 10px; border-radius: var(--border-radius); margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
+        /* --- ЗАДАЧИ --- */
+        .energy-tracker { display: flex; justify-content: space-between; gap: 5px; background: var(--secondary-bg); padding: 10px; border-radius: var(--border-radius); margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .energy-btn { font-size: 24px; background: none; border: none; cursor: pointer; opacity: 0.3; transition: 0.2s; padding: 5px; }
         .energy-btn.active { opacity: 1; transform: scale(1.2); }
 
@@ -105,12 +68,12 @@
         .input-container { display: flex; gap: 10px; margin-bottom: 15px; }
         input[type="text"] { flex: 1; padding: 15px 20px; border-radius: 20px; border: none; background-color: var(--secondary-bg); color: var(--text-color); font-size: 16px; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .priority-toggle { background: var(--secondary-bg); border: none; border-radius: 20px; padding: 0 18px; font-size: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.2s; }
-        .priority-toggle.active { background: var(--danger-color); color: white; }
+        .priority-toggle.active { background: #ff3b30; color: white; }
         button#add-btn { background-color: var(--button-color); color: var(--button-text-color); border: none; border-radius: 20px; padding: 0 20px; font-size: 24px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
         ul { list-style: none; padding: 0; margin: 0; flex: 1; }
         li { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; background-color: var(--secondary-bg); border-radius: 20px; margin-bottom: 10px; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-left: 4px solid transparent; }
-        li.important { border-left-color: var(--danger-color); }
+        li.important { border-left-color: #ff3b30; }
         .task-text { flex: 1; font-size: 16px; font-weight: 500; word-break: break-word; cursor: pointer; }
         li.completed .task-text { text-decoration: line-through; color: var(--hint-color); }
         li.completed { border-left-color: transparent; opacity: 0.7; }
@@ -119,12 +82,32 @@
         .move-btn { margin-top: 15px; padding: 15px; background: transparent; border: 2px dashed #d1d1d6; color: var(--hint-color); border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; }
         .empty-state { text-align: center; color: var(--hint-color); margin-top: 30px; font-size: 15px; }
 
-        /* --- ЭКРАН: СТАТИСТИКА / МЕТОДЫ / АНТИ-СТРЕСС --- */
-        .card { background: var(--secondary-bg); padding: 25px; border-radius: var(--border-radius); margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-        
-        .stat-number { font-size: 48px; font-weight: 800; color: var(--text-color); margin: 10px 0; letter-spacing: -1px; }
-        .stat-label { font-size: 14px; color: var(--hint-color); font-weight: 500; }
+        /* --- ЭКРАН: ДНЕВНИК --- */
+        .diary-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .diary-header h1 { margin: 0; }
+        .current-date-label { font-size: 14px; color: var(--hint-color); font-weight: 600; }
 
+        .diary-actions { display: flex; gap: 10px; margin-bottom: 20px; }
+        .diary-btn { flex: 1; padding: 15px; border-radius: 20px; border: none; background: var(--secondary-bg); color: var(--text-color); font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .diary-btn:active { transform: scale(0.98); }
+
+        .mood-selector { display: flex; justify-content: space-between; background: var(--secondary-bg); padding: 15px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .mood-btn { font-size: 28px; background: none; border: none; cursor: pointer; opacity: 0.3; transition: 0.2s; padding: 5px; }
+        .mood-btn.active { opacity: 1; transform: scale(1.2); }
+
+        .diary-textarea { width: 100%; min-height: 120px; padding: 15px; border-radius: 20px; border: none; background: var(--secondary-bg); color: var(--text-color); font-size: 15px; outline: none; resize: none; box-shadow: 0 4px 15px rgba(0,0,0,0.03); font-family: inherit; margin-bottom: 20px; }
+        
+        .save-diary-btn { width: 100%; padding: 16px; border-radius: 20px; border: none; background: var(--button-color); color: white; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 30px; }
+
+        .calendar-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .calendar-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--secondary-bg); border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: 0.2s; }
+        .calendar-day.active { background: var(--button-color); color: white; }
+        .calendar-day.has-data { border: 2px solid var(--button-color); }
+        .calendar-day .day-emoji { font-size: 14px; margin-top: 2px; }
+
+        /* --- МЕТОДЫ / АНТИ-СТРЕСС --- */
+        .card { background: var(--secondary-bg); padding: 25px; border-radius: var(--border-radius); margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .method-card { cursor: pointer; transition: transform 0.1s; border-left: 4px solid var(--button-color); }
         .method-card:active { transform: scale(0.98); }
         .method-card h3 { margin: 0 0 10px 0; font-size: 18px; font-weight: 700; display: flex; justify-content: space-between; }
@@ -132,32 +115,19 @@
         .method-card.open p { display: block; margin-top: 15px; }
         .method-card.open h3 span { transform: rotate(180deg); }
         .method-card h3 span { transition: 0.3s; font-size: 14px; color: var(--hint-color); }
-
         .breath-btn { width: 100%; padding: 16px; border-radius: 20px; border: none; background: var(--button-color); color: white; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px; }
 
-        /* --- НИЖНЯЯ ПАНЕЛЬ (КАК НА СКРИНЕ) --- */
+        /* --- НИЖНЯЯ ПАНЕЛЬ --- */
         .bottom-nav {
             position: fixed; bottom: 20px; left: 20px; right: 20px;
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 20px;
-            border-radius: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            z-index: 100;
+            padding: 10px 20px; border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100;
         }
-        .nav-item {
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; padding: 10px; border-radius: 50%; transition: 0.3s;
-            color: var(--hint-color);
-        }
-        .nav-item.active { 
-            background: var(--button-color); 
-            color: var(--button-text-color);
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
+        .nav-item { display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 10px; border-radius: 50%; transition: 0.3s; color: var(--hint-color); }
+        .nav-item.active { background: var(--button-color); color: var(--button-text-color); padding: 10px 20px; border-radius: 20px; }
         .nav-icon { font-size: 20px; }
         .nav-text { display: none; font-size: 14px; font-weight: 600; margin-left: 8px; }
         .nav-item.active .nav-text { display: block; }
@@ -203,21 +173,33 @@
         <button class="move-btn" id="move-btn" onclick="moveUnfinished()">Перенести невыполненное</button>
     </div>
 
-    <!-- ЭКРАН 2: СТАТИСТИКА -->
-    <div id="screen-stats" class="screen">
-        <h1>Статистика</h1>
-        <div class="card">
-            <div class="stat-label">Выполнено сегодня</div>
-            <div class="stat-number" id="stats-completed">0</div>
+    <!-- ЭКРАН 2: ДНЕВНИК (Бывшая статистика) -->
+    <div id="screen-diary" class="screen">
+        <div class="diary-header">
+            <h1>Дневник</h1>
+            <div class="current-date-label" id="diary-date-label">Сегодня</div>
         </div>
-        <div class="card">
-            <div class="stat-label">Осталось на сегодня</div>
-            <div class="stat-number" id="stats-remaining">0</div>
+        
+        <div class="diary-actions">
+            <button class="diary-btn" onclick="scrollToMood()">😊 Настроение</button>
+            <button class="diary-btn" onclick="scrollToNotes()">🎯 Мысли/Цели</button>
         </div>
-        <div class="card" style="background: #000; color: #fff;">
-            <div class="stat-label" style="color: #aaa;">Твоя энергия</div>
-            <div class="stat-number" id="stats-energy">—</div>
-            <div class="stat-label" style="color: #aaa;" id="stats-energy-text">Оцени себя на вкладке "Задачи"</div>
+
+        <div class="mood-selector" id="mood-selector">
+            <button class="mood-btn" onclick="setDiaryMood(1)">😫</button>
+            <button class="mood-btn" onclick="setDiaryMood(2)">😐</button>
+            <button class="mood-btn" onclick="setDiaryMood(3)">🙂</button>
+            <button class="mood-btn" onclick="setDiaryMood(4)">😎</button>
+            <button class="mood-btn" onclick="setDiaryMood(5)">🚀</button>
+        </div>
+
+        <textarea class="diary-textarea" id="diary-notes" placeholder="Запиши свои мысли, цели на день или то, за что ты благодарен..."></textarea>
+        
+        <button class="save-diary-btn" onclick="saveDiary()">Сохранить запись</button>
+
+        <div class="calendar-title">Календарь</div>
+        <div class="calendar-grid" id="calendar-grid">
+            <!-- Дни будут генерироваться через JS -->
         </div>
     </div>
 
@@ -260,36 +242,42 @@
         </div>
     </div>
 
-    <!-- НИЖНЯЯ НАВИГАЦИЯ (Плавающая) -->
+    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
     <div class="bottom-nav" id="main-nav" style="display: none;">
         <div class="nav-item active" onclick="openScreen('tasks', this)">
-            <span class="nav-icon">📝</span>
+            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
             <span class="nav-text">Задачи</span>
         </div>
+        <div class="nav-item" onclick="openScreen('diary', this)">
+            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span class="nav-text">Дневник</span>
+        </div>
         <div class="nav-item" onclick="openScreen('methods', this)">
-            <span class="nav-icon">📚</span>
+            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
             <span class="nav-text">Методы</span>
         </div>
-        <div class="nav-item" onclick="openScreen('stats', this)">
-            <span class="nav-icon">📊</span>
-            <span class="nav-text">Статы</span>
-        </div>
         <div class="nav-item" onclick="openScreen('stress', this)">
-            <span class="nav-icon">🧘</span>
+            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             <span class="nav-text">Покой</span>
         </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
+        tg.expand(); tg.ready();
 
+        // --- СОСТОЯНИЕ ---
         let tasks = JSON.parse(localStorage.getItem('tg_tasks_v2')) || [];
         let currentTab = 'today';
         let isImportant = false;
         let energy = localStorage.getItem('tg_energy') || null;
+        
+        // Дневник
+        let diaryData = JSON.parse(localStorage.getItem('tg_diary')) || {};
+        let selectedDate = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+        let diaryMood = 0;
 
+        // --- ЭЛЕМЕНТЫ ---
         const taskInput = document.getElementById('task-input');
         const addBtn = document.getElementById('add-btn');
         const taskList = document.getElementById('task-list');
@@ -299,7 +287,7 @@
         const priorityBtn = document.getElementById('priority-btn');
         const moveBtn = document.getElementById('move-btn');
 
-        // Старт приложения
+        // --- СТАРТ ---
         function startApp() {
             document.getElementById('screen-start').classList.remove('active');
             document.getElementById('main-nav').style.display = 'flex';
@@ -307,7 +295,7 @@
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         }
 
-        // Навигация
+        // --- НАВИГАЦИЯ ---
         function openScreen(screenName, navElement) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen-' + screenName).classList.add('active');
@@ -315,180 +303,190 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             navElement.classList.add('active');
 
-            if (screenName === 'stats') updateStats();
+            if (screenName === 'diary') renderCalendar();
             if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
         }
 
-        // Логика задач
-        function togglePriority() {
-            isImportant = !isImportant;
-            priorityBtn.classList.toggle('active', isImportant);
-        }
-
+        // --- ЛОГИКА ЗАДАЧ ---
+        function togglePriority() { isImportant = !isImportant; priorityBtn.classList.toggle('active', isImportant); }
         function switchTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             renderTasks();
         }
-
         function setEnergy(level) {
-            energy = level;
-            localStorage.setItem('tg_energy', level);
-            renderEnergy();
+            energy = level; localStorage.setItem('tg_energy', level); renderEnergy();
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
-
         function renderEnergy() {
             const btns = document.querySelectorAll('.energy-btn');
-            btns.forEach((btn, index) => {
-                btn.classList.toggle('active', (index + 1) == energy);
-            });
+            btns.forEach((btn, index) => { btn.classList.toggle('active', (index + 1) == energy); });
         }
-
         function renderTasks() {
             taskList.innerHTML = '';
             const filteredTasks = tasks.filter(t => t.tab === currentTab);
-            
             if (filteredTasks.length === 0) {
                 emptyState.style.display = 'block';
                 moveBtn.style.display = currentTab === 'today' ? 'block' : 'none';
-            } else {
-                emptyState.style.display = 'none';
-            }
+            } else { emptyState.style.display = 'none'; }
 
             filteredTasks.forEach((task) => {
                 const realIndex = tasks.findIndex(t => t.id === task.id);
                 const li = document.createElement('li');
                 if (task.completed) li.classList.add('completed');
                 if (task.important) li.classList.add('important');
-
                 const span = document.createElement('span');
-                span.className = 'task-text';
-                span.textContent = task.text;
+                span.className = 'task-text'; span.textContent = task.text;
                 span.onclick = () => toggleTask(realIndex);
-
                 const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-btn';
-                deleteBtn.textContent = '✕';
+                deleteBtn.className = 'delete-btn'; deleteBtn.textContent = '✕';
                 deleteBtn.onclick = () => deleteTask(realIndex);
-
-                li.appendChild(span);
-                li.appendChild(deleteBtn);
-                taskList.appendChild(li);
+                li.appendChild(span); li.appendChild(deleteBtn); taskList.appendChild(li);
             });
             updateProgress();
         }
-
         function updateProgress() {
             const todayTasks = tasks.filter(t => t.tab === 'today');
             const completed = todayTasks.filter(t => t.completed).length;
             const total = todayTasks.length;
             progressText.textContent = `Выполнено ${completed} из ${total}`;
-            const percent = total === 0 ? 0 : (completed / total) * 100;
-            progressFill.style.width = `${percent}%`;
+            progressFill.style.width = `${total === 0 ? 0 : (completed / total) * 100}%`;
         }
-
         function addTask() {
             const text = taskInput.value.trim();
             if (text) {
-                tasks.push({ 
-                    id: Date.now().toString(),
-                    text: text, 
-                    completed: false,
-                    important: isImportant,
-                    tab: currentTab
-                });
-                taskInput.value = '';
-                isImportant = false;
-                priorityBtn.classList.remove('active');
-                saveTasks();
-                renderTasks();
+                tasks.push({ id: Date.now().toString(), text, completed: false, important: isImportant, tab: currentTab });
+                taskInput.value = ''; isImportant = false; priorityBtn.classList.remove('active');
+                saveTasks(); renderTasks();
                 if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
             }
         }
+        function toggleTask(index) { tasks[index].completed = !tasks[index].completed; saveTasks(); renderTasks(); }
+        function deleteTask(index) { tasks.splice(index, 1); saveTasks(); renderTasks(); }
+        function moveUnfinished() {
+            let count = 0;
+            tasks.forEach(task => { if (task.tab === 'today' && !task.completed) { task.tab = 'someday'; count++; } });
+            tasks = tasks.filter(t => !(t.tab === 'today' && t.completed));
+            saveTasks(); renderTasks();
+            if (count > 0) tg.showAlert(`Перенесено задач: ${count}. Не забудьте про отдых!`);
+            else tg.showAlert("Все задачи на сегодня выполнены! Отдыхайте 🎉");
+        }
+        function saveTasks() { localStorage.setItem('tg_tasks_v2', JSON.stringify(tasks)); }
 
-        function toggleTask(index) {
-            tasks[index].completed = !tasks[index].completed;
-            saveTasks();
-            renderTasks();
+        // --- ЛОГИКА ДНЕВНИКА ---
+        function scrollToMood() {
+            document.getElementById('mood-selector').scrollIntoView({ behavior: 'smooth' });
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+        function scrollToNotes() {
+            document.getElementById('diary-notes').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('diary-notes').focus();
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            saveTasks();
-            renderTasks();
-        }
-
-        function moveUnfinished() {
-            let count = 0;
-            tasks.forEach(task => {
-                if (task.tab === 'today' && !task.completed) {
-                    task.tab = 'someday';
-                    count++;
-                }
+        function setDiaryMood(level) {
+            diaryMood = level;
+            document.querySelectorAll('.mood-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', (index + 1) == diaryMood);
             });
-            tasks = tasks.filter(t => !(t.tab === 'today' && t.completed));
-            saveTasks();
-            renderTasks();
-            if (count > 0) {
-                tg.showAlert(`Перенесено задач: ${count}. Не забудьте про отдых!`);
-            } else {
-                tg.showAlert("Все задачи на сегодня выполнены! Отдыхайте 🎉");
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            
+            const today = new Date();
+            // Показываем последние 14 дней (для простоты, чтобы влезло на экран)
+            for (let i = 13; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                const dateStr = d.toISOString().split('T')[0];
+                const dayNum = d.getDate();
+                const month = d.toLocaleString('ru-RU', { month: 'short' });
+
+                const el = document.createElement('div');
+                el.className = 'calendar-day';
+                if (dateStr === selectedDate) el.classList.add('active');
+                
+                // Если есть данные за этот день, показываем смайлик
+                if (diaryData[dateStr] && diaryData[dateStr].mood) {
+                    el.classList.add('has-data');
+                    const emojis = ['😫', '😐', '🙂', '😎', '🚀'];
+                    el.innerHTML = `<div>${dayNum}</div><div class="day-emoji">${emojis[diaryData[dateStr].mood - 1]}</div>`;
+                } else {
+                    el.innerHTML = `<div>${dayNum}</div><div style="font-size:10px; color:var(--hint-color); margin-top:2px;">${month}</div>`;
+                }
+
+                el.onclick = () => loadDiaryDate(dateStr, d);
+                grid.appendChild(el);
             }
         }
 
-        function saveTasks() {
-            localStorage.setItem('tg_tasks_v2', JSON.stringify(tasks));
+        function loadDiaryDate(dateStr, dateObj) {
+            selectedDate = dateStr;
+            // Форматируем дату для заголовка
+            const options = { day: 'numeric', month: 'long' };
+            document.getElementById('diary-date-label').textContent = dateObj.toLocaleDateString('ru-RU', options);
+
+            // Загружаем данные из памяти
+            const entry = diaryData[dateStr] || { mood: 0, notes: '' };
+            
+            // Ставим настроение
+            diaryMood = entry.mood;
+            document.querySelectorAll('.mood-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', (index + 1) == diaryMood);
+            });
+
+            // Ставим текст
+            document.getElementById('diary-notes').value = entry.notes;
+            
+            // Перерисовываем календарь, чтобы выделить активный день
+            renderCalendar();
         }
 
-        function updateStats() {
-            const todayTasks = tasks.filter(t => t.tab === 'today');
-            const completed = todayTasks.filter(t => t.completed).length;
-            const remaining = todayTasks.length - completed;
-            
-            document.getElementById('stats-completed').textContent = completed;
-            document.getElementById('stats-remaining').textContent = remaining;
-            
-            const energyEl = document.getElementById('stats-energy');
-            const energyText = document.getElementById('stats-energy-text');
-            
-            if (energy) {
-                const emojis = ['😫', '😐', '🙂', '😎', '🚀'];
-                energyEl.textContent = emojis[energy - 1];
-                energyText.textContent = "Ваше состояние сегодня";
-            } else {
-                energyEl.textContent = '—';
-                energyText.textContent = "Вы не отмечали энергию";
+        function saveDiary() {
+            const notes = document.getElementById('diary-notes').value.trim();
+            if (diaryMood === 0 && notes === '') {
+                tg.showAlert("Поставь настроение или напиши что-нибудь!");
+                return;
             }
+
+            diaryData[selectedDate] = {
+                mood: diaryMood,
+                notes: notes
+            };
+            
+            localStorage.setItem('tg_diary', JSON.stringify(diaryData));
+            renderCalendar();
+            
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('success');
+            tg.showAlert("Запись сохранена! ✨");
         }
 
+        // --- ОСТАЛЬНОЕ (МЕТОДЫ, ДЫХАНИЕ) ---
+        function toggleMethod(card) { card.classList.toggle('open'); if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light'); }
         function startBreathing() {
             tg.showAlert("Сделайте глубокий вдох... (надуваете шар)");
             setTimeout(() => {
                 tg.showAlert("Задержите дыхание на 4 секунды...");
                 setTimeout(() => {
                     tg.showAlert("Медленный выдох... (задуваете свечу)");
-                    setTimeout(() => {
-                        tg.showAlert("Отлично! Повторите еще 4 раза 🧘");
-                    }, 4000);
+                    setTimeout(() => { tg.showAlert("Отлично! Повторите еще 4 раза 🧘"); }, 4000);
                 }, 4000);
             }, 4000);
         }
 
-        function toggleMethod(card) {
-            card.classList.toggle('open');
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
-
+        // Слушатели
         addBtn.addEventListener('click', addTask);
-        taskInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addTask();
-        });
+        taskInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addTask(); });
 
-        renderEnergy();
-        renderTasks();
+        // Инициализация
+        renderEnergy(); renderTasks();
+        // Ставим сегодняшнюю дату в дневнике по умолчанию
+        const todayObj = new Date();
+        loadDiaryDate(selectedDate, todayObj);
     </script>
 </body>
 </html>

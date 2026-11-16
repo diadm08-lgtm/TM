@@ -22,213 +22,182 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 15px;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
             box-sizing: border-box;
         }
 
+        /* Экраны */
+        .screen {
+            display: none;
+            flex-direction: column;
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 80px; /* Место для нижней панели */
+        }
+        .screen.active { display: flex; }
+
         h1 { font-size: 22px; text-align: center; margin: 10px 0; }
 
-        /* Трекер энергии */
+        /* --- ЭКРАН 1: ЗАДАЧИ --- */
         .energy-tracker {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            background: var(--secondary-bg);
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 15px;
+            display: flex; justify-content: center; gap: 15px;
+            background: var(--secondary-bg); padding: 10px; border-radius: 12px; margin-bottom: 15px;
         }
-        .energy-btn {
-            font-size: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            opacity: 0.4;
-            transition: 0.2s;
-        }
+        .energy-btn { font-size: 24px; background: none; border: none; cursor: pointer; opacity: 0.4; transition: 0.2s; }
         .energy-btn.active { opacity: 1; transform: scale(1.2); }
 
-        /* Вкладки */
-        .tabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 15px;
-            background: var(--secondary-bg);
-            padding: 5px;
-            border-radius: 10px;
-        }
-        .tab {
-            flex: 1;
-            padding: 8px;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--hint-color);
-        }
-        .tab.active {
-            background: var(--bg-color);
-            color: var(--text-color);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; background: var(--secondary-bg); padding: 5px; border-radius: 10px; }
+        .tab { flex: 1; padding: 8px; text-align: center; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--hint-color); }
+        .tab.active { background: var(--bg-color); color: var(--text-color); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        /* Прогресс бар */
-        .progress-container {
-            margin-bottom: 15px;
-            font-size: 12px;
-            color: var(--hint-color);
-        }
-        .progress-bar {
-            height: 6px;
-            background: var(--secondary-bg);
-            border-radius: 3px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: var(--success-color);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
+        .progress-container { margin-bottom: 15px; font-size: 12px; color: var(--hint-color); }
+        .progress-bar { height: 6px; background: var(--secondary-bg); border-radius: 3px; margin-top: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--success-color); width: 0%; transition: width 0.3s ease; }
 
-        /* Ввод */
-        .input-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        input[type="text"] {
-            flex: 1;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid var(--hint-color);
-            background-color: var(--secondary-bg);
-            color: var(--text-color);
-            font-size: 16px;
-            outline: none;
-        }
-        .priority-toggle {
-            background: var(--secondary-bg);
-            border: 1px solid var(--hint-color);
-            border-radius: 10px;
-            padding: 0 15px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .priority-toggle.active {
-            background: var(--danger-color);
-            border-color: var(--danger-color);
-            color: white;
-        }
-        button#add-btn {
-            background-color: var(--button-color);
-            color: var(--button-text-color);
-            border: none;
-            border-radius: 10px;
-            padding: 0 20px;
-            font-size: 20px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+        .input-container { display: flex; gap: 10px; margin-bottom: 10px; }
+        input[type="text"] { flex: 1; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--hint-color); background-color: var(--secondary-bg); color: var(--text-color); font-size: 16px; outline: none; }
+        .priority-toggle { background: var(--secondary-bg); border: 1px solid var(--hint-color); border-radius: 10px; padding: 0 15px; font-size: 20px; cursor: pointer; }
+        .priority-toggle.active { background: var(--danger-color); border-color: var(--danger-color); color: white; }
+        button#add-btn { background-color: var(--button-color); color: var(--button-text-color); border: none; border-radius: 10px; padding: 0 20px; font-size: 20px; font-weight: 600; cursor: pointer; }
 
-        /* Список задач */
         ul { list-style: none; padding: 0; margin: 0; flex: 1; }
-        li {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 15px;
-            background-color: var(--secondary-bg);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            transition: 0.2s;
-            border-left: 4px solid transparent;
-        }
+        li { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background-color: var(--secondary-bg); border-radius: 10px; margin-bottom: 8px; transition: 0.2s; border-left: 4px solid transparent; }
         li.important { border-left-color: var(--danger-color); }
-        
         .task-text { flex: 1; font-size: 15px; word-break: break-word; cursor: pointer; }
         li.completed .task-text { text-decoration: line-through; color: var(--hint-color); }
         li.completed { border-left-color: transparent; }
+        .delete-btn { background: none; border: none; color: var(--danger-color); font-size: 18px; cursor: pointer; padding: 0 5px; margin-left: 10px; }
 
-        .delete-btn {
-            background: none; border: none; color: var(--danger-color);
-            font-size: 18px; cursor: pointer; padding: 0 5px; margin-left: 10px;
-        }
-
-        /* Кнопка переноса */
-        .move-btn {
-            margin-top: 15px;
-            padding: 12px;
-            background: transparent;
-            border: 1px dashed var(--hint-color);
-            color: var(--hint-color);
-            border-radius: 10px;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
-        }
-
+        .move-btn { margin-top: 15px; padding: 12px; background: transparent; border: 1px dashed var(--hint-color); color: var(--hint-color); border-radius: 10px; font-size: 14px; cursor: pointer; width: 100%; }
         .empty-state { text-align: center; color: var(--hint-color); margin-top: 30px; font-size: 14px; }
+
+        /* --- ЭКРАН 2: СТАТИСТИКА --- */
+        .stat-card { background: var(--secondary-bg); padding: 20px; border-radius: 15px; margin-bottom: 15px; text-align: center; }
+        .stat-number { font-size: 36px; font-weight: bold; color: var(--button-color); margin: 10px 0; }
+        .stat-label { font-size: 14px; color: var(--hint-color); }
+
+        /* --- ЭКРАН 3: АНТИ-СТРЕСС --- */
+        .tip-card { background: var(--secondary-bg); padding: 15px; border-radius: 15px; margin-bottom: 15px; }
+        .tip-card h3 { margin: 0 0 10px 0; font-size: 16px; }
+        .tip-card p { margin: 0; font-size: 14px; color: var(--hint-color); line-height: 1.4; }
+        .breath-btn { width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--success-color); color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+
+        /* --- НИЖНЯЯ НАВИГАЦИЯ --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--secondary-bg);
+            display: flex; justify-content: space-around;
+            padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+            border-top: 1px solid rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            font-size: 11px; color: var(--hint-color); cursor: pointer;
+            padding: 5px 15px; border-radius: 10px; transition: 0.2s;
+        }
+        .nav-item.active { color: var(--button-color); background: rgba(0,122,255,0.1); }
+        .nav-icon { font-size: 20px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <h1>Мой день</h1>
-
-    <!-- Трекер энергии -->
-    <div class="energy-tracker" id="energy-tracker">
-        <button class="energy-btn" onclick="setEnergy(1)">😫</button>
-        <button class="energy-btn" onclick="setEnergy(2)">😐</button>
-        <button class="energy-btn" onclick="setEnergy(3)">🙂</button>
-        <button class="energy-btn" onclick="setEnergy(4)">😎</button>
-        <button class="energy-btn" onclick="setEnergy(5)">🚀</button>
+    <!-- ЭКРАН 1: ЗАДАЧИ -->
+    <div id="screen-tasks" class="screen active">
+        <h1>Мой день</h1>
+        <div class="energy-tracker" id="energy-tracker">
+            <button class="energy-btn" onclick="setEnergy(1)">😫</button>
+            <button class="energy-btn" onclick="setEnergy(2)">😐</button>
+            <button class="energy-btn" onclick="setEnergy(3)">🙂</button>
+            <button class="energy-btn" onclick="setEnergy(4)">😎</button>
+            <button class="energy-btn" onclick="setEnergy(5)">🚀</button>
+        </div>
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('today')">На сегодня</div>
+            <div class="tab" onclick="switchTab('someday')">Когда-нибудь</div>
+        </div>
+        <div class="progress-container">
+            <span id="progress-text">Выполнено 0 из 0</span>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+        <div class="input-container">
+            <button class="priority-toggle" id="priority-btn" onclick="togglePriority()" title="Сделать важной">🔥</button>
+            <input type="text" id="task-input" placeholder="Что нужно сделать?">
+            <button id="add-btn">+</button>
+        </div>
+        <ul id="task-list"></ul>
+        <div id="empty-state" class="empty-state">Пока нет задач. Отдыхайте! ✨</div>
+        <button class="move-btn" id="move-btn" onclick="moveUnfinished()">Перенести невыполненное</button>
     </div>
 
-    <!-- Вкладки -->
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('today')">На сегодня</div>
-        <div class="tab" onclick="switchTab('someday')">Когда-нибудь</div>
+    <!-- ЭКРАН 2: СТАТИСТИКА -->
+    <div id="screen-stats" class="screen">
+        <h1>Статистика</h1>
+        <div class="stat-card">
+            <div class="stat-label">Выполнено сегодня</div>
+            <div class="stat-number" id="stats-completed">0</div>
+            <div class="stat-label">задач</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Осталось на сегодня</div>
+            <div class="stat-number" id="stats-remaining">0</div>
+            <div class="stat-label">задач</div>
+        </div>
+        <div class="stat-card" style="background: rgba(52, 199, 89, 0.1);">
+            <div class="stat-label">Ваш уровень энергии</div>
+            <div class="stat-number" id="stats-energy">Не указан</div>
+            <div class="stat-label" id="stats-energy-text">Оцените себя на вкладке "Задачи"</div>
+        </div>
     </div>
 
-    <!-- Прогресс -->
-    <div class="progress-container">
-        <span id="progress-text">Выполнено 0 из 0</span>
-        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <!-- ЭКРАН 3: АНТИ-СТРЕСС -->
+    <div id="screen-stress" class="screen">
+        <h1>Анти-выгорание</h1>
+        <div class="tip-card">
+            <h3>🧘 Техника «Квадратное дыхание»</h3>
+            <p>Вдох 4 сек. → Задержка 4 сек. → Выдох 4 сек. → Задержка 4 сек. Повторите 5 раз. Это снижает уровень кортизола (гормона стресса).</p>
+            <button class="breath-btn" onclick="startBreathing()">Начать дыхание</button>
+        </div>
+        <div class="tip-card">
+            <h3>📵 Правило 20-20-20</h3>
+            <p>Каждые 20 минут смотрите на экран, отводите взгляд на 20 секунд на объект в 20 футах (6 метрах) от вас. Это спасает глаза при подготовке к экзаменам.</p>
+        </div>
+        <div class="tip-card">
+            <h3>💤 Сон важнее зубрежки</h3>
+            <p>Если вы не выспались, ваш мозг не запомнит информацию. Лучше лечь спать на час раньше, чем учить до 3 ночи.</p>
+        </div>
     </div>
 
-    <!-- Ввод задачи -->
-    <div class="input-container">
-        <button class="priority-toggle" id="priority-btn" onclick="togglePriority()" title="Сделать важной">🔥</button>
-        <input type="text" id="task-input" placeholder="Что нужно сделать?">
-        <button id="add-btn">+</button>
+    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="openScreen('tasks', this)">
+            <span class="nav-icon">📝</span>
+            <span>Задачи</span>
+        </div>
+        <div class="nav-item" onclick="openScreen('stats', this)">
+            <span class="nav-icon">📊</span>
+            <span>Статистика</span>
+        </div>
+        <div class="nav-item" onclick="openScreen('stress', this)">
+            <span class="nav-icon">🧘</span>
+            <span>Анти-стресс</span>
+        </div>
     </div>
-
-    <!-- Список -->
-    <ul id="task-list"></ul>
-    <div id="empty-state" class="empty-state">Пока нет задач. Отдыхайте! ✨</div>
-
-    <!-- Кнопка переноса -->
-    <button class="move-btn" id="move-btn" onclick="moveUnfinished()">Перенести невыполненное на завтра</button>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
 
-        // Состояние
         let tasks = JSON.parse(localStorage.getItem('tg_tasks_v2')) || [];
-        let currentTab = 'today'; // 'today' или 'someday'
+        let currentTab = 'today';
         let isImportant = false;
-        
-        // Энергия
         let energy = localStorage.getItem('tg_energy') || null;
 
-        // Элементы
         const taskInput = document.getElementById('task-input');
         const addBtn = document.getElementById('add-btn');
         const taskList = document.getElementById('task-list');
@@ -238,19 +207,30 @@
         const priorityBtn = document.getElementById('priority-btn');
         const moveBtn = document.getElementById('move-btn');
 
-        // Инициализация
-        function init() {
-            renderTasks();
-            renderEnergy();
+        // --- НАВИГАЦИЯ ПО ЭКРАНАМ ---
+        function openScreen(screenName, navElement) {
+            // Скрываем все экраны
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Показываем нужный
+            document.getElementById('screen-' + screenName).classList.add('active');
+            
+            // Меняем активную кнопку внизу
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            navElement.classList.add('active');
+
+            // Обновляем статистику при переходе на нее
+            if (screenName === 'stats') updateStats();
+            
+            // Вибрация
+            if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
         }
 
-        // Переключение приоритета
+        // --- ЛОГИКА ЗАДАЧ ---
         function togglePriority() {
             isImportant = !isImportant;
             priorityBtn.classList.toggle('active', isImportant);
         }
 
-        // Переключение вкладок
         function switchTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -258,12 +238,10 @@
             renderTasks();
         }
 
-        // Установка энергии
         function setEnergy(level) {
             energy = level;
             localStorage.setItem('tg_energy', level);
             renderEnergy();
-            // Вибрация для отклика
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
@@ -274,11 +252,8 @@
             });
         }
 
-        // Отрисовка задач
         function renderTasks() {
             taskList.innerHTML = '';
-            
-            // Фильтруем задачи по текущей вкладке
             const filteredTasks = tasks.filter(t => t.tab === currentTab);
             
             if (filteredTasks.length === 0) {
@@ -288,10 +263,8 @@
                 emptyState.style.display = 'none';
             }
 
-            filteredTasks.forEach((task, index) => {
-                // Находим реальный индекс задачи в общем массиве
+            filteredTasks.forEach((task) => {
                 const realIndex = tasks.findIndex(t => t.id === task.id);
-                
                 const li = document.createElement('li');
                 if (task.completed) li.classList.add('completed');
                 if (task.important) li.classList.add('important');
@@ -310,16 +283,13 @@
                 li.appendChild(deleteBtn);
                 taskList.appendChild(li);
             });
-
             updateProgress();
         }
 
-        // Обновление прогресс-бара (считаем только задачи на сегодня)
         function updateProgress() {
             const todayTasks = tasks.filter(t => t.tab === 'today');
             const completed = todayTasks.filter(t => t.completed).length;
             const total = todayTasks.length;
-            
             progressText.textContent = `Выполнено ${completed} из ${total}`;
             const percent = total === 0 ? 0 : (completed / total) * 100;
             progressFill.style.width = `${percent}%`;
@@ -357,7 +327,6 @@
             renderTasks();
         }
 
-        // Перенос невыполненных задач на завтра (на вкладку "Когда-нибудь")
         function moveUnfinished() {
             let count = 0;
             tasks.forEach(task => {
@@ -366,13 +335,9 @@
                     count++;
                 }
             });
-            
-            // Удаляем выполненные задачи из списка
             tasks = tasks.filter(t => !(t.tab === 'today' && t.completed));
-            
             saveTasks();
             renderTasks();
-            
             if (count > 0) {
                 tg.showAlert(`Перенесено задач: ${count}. Не забудьте про отдых!`);
             } else {
@@ -384,13 +349,52 @@
             localStorage.setItem('tg_tasks_v2', JSON.stringify(tasks));
         }
 
+        // --- СТАТИСТИКА ---
+        function updateStats() {
+            const todayTasks = tasks.filter(t => t.tab === 'today');
+            const completed = todayTasks.filter(t => t.completed).length;
+            const remaining = todayTasks.length - completed;
+            
+            document.getElementById('stats-completed').textContent = completed;
+            document.getElementById('stats-remaining').textContent = remaining;
+            
+            const energyEl = document.getElementById('stats-energy');
+            const energyText = document.getElementById('stats-energy-text');
+            
+            if (energy) {
+                const emojis = ['😫', '😐', '🙂', '😎', '🚀'];
+                energyEl.textContent = emojis[energy - 1];
+                energyText.textContent = "Ваше состояние сегодня";
+            } else {
+                energyEl.textContent = '—';
+                energyText.textContent = "Вы не отмечали энергию";
+            }
+        }
+
+        // --- ДЫХАНИЕ ---
+        function startBreathing() {
+            tg.showAlert("Сделайте глубокий вдох... (представьте, что надуваете шар)");
+            setTimeout(() => {
+                tg.showAlert("Задержите дыхание на 4 секунды...");
+                setTimeout(() => {
+                    tg.showAlert("Медленный выдох... (представьте, что задуваете свечу)");
+                    setTimeout(() => {
+                        tg.showAlert("Отлично! Повторите это упражнение еще 4 раза 🧘");
+                    }, 4000);
+                }, 4000);
+            }, 4000);
+        }
+
         // Слушатели
         addBtn.addEventListener('click', addTask);
         taskInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') addTask();
         });
 
-        init();
+        // Инициализация
+        renderEnergy();
+        renderTasks();
     </script>
 </body>
 </html>
+            

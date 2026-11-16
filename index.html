@@ -15,6 +15,7 @@
             --secondary-bg: var(--tg-theme-secondary-bg-color, #f1f1f1);
             --danger-color: #ff3b30;
             --success-color: #34c759;
+            --purple-color: #af52de; /* Для вкладки методов */
         }
 
         body {
@@ -86,6 +87,23 @@
         .tip-card p { margin: 0; font-size: 14px; color: var(--hint-color); line-height: 1.4; }
         .breath-btn { width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--success-color); color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
+        /* --- ЭКРАН 4: МЕТОДЫ УЧЕБЫ --- */
+        .method-card { 
+            background: var(--secondary-bg); 
+            padding: 15px; 
+            border-radius: 15px; 
+            margin-bottom: 15px; 
+            border-left: 4px solid var(--purple-color);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .method-card:active { transform: scale(0.98); }
+        .method-card h3 { margin: 0 0 8px 0; font-size: 16px; display: flex; justify-content: space-between; }
+        .method-card p { margin: 0; font-size: 14px; color: var(--hint-color); line-height: 1.4; display: none; }
+        .method-card.open p { display: block; margin-top: 10px; }
+        .method-card.open h3 span { transform: rotate(180deg); }
+        .method-card h3 span { transition: 0.3s; font-size: 12px; }
+
         /* --- НИЖНЯЯ НАВИГАЦИЯ --- */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0;
@@ -98,7 +116,7 @@
         .nav-item {
             display: flex; flex-direction: column; align-items: center;
             font-size: 11px; color: var(--hint-color); cursor: pointer;
-            padding: 5px 15px; border-radius: 10px; transition: 0.2s;
+            padding: 5px 10px; border-radius: 10px; transition: 0.2s;
         }
         .nav-item.active { color: var(--button-color); background: rgba(0,122,255,0.1); }
         .nav-icon { font-size: 20px; margin-bottom: 2px; }
@@ -172,6 +190,31 @@
         </div>
     </div>
 
+    <!-- ЭКРАН 4: МЕТОДЫ УЧЕБЫ -->
+    <div id="screen-methods" class="screen">
+        <h1>Методы учебы</h1>
+        
+        <div class="method-card" onclick="toggleMethod(this)">
+            <h3>🍅 Метод Помодоро <span>▼</span></h3>
+            <p>Учитесь 25 минут, затем отдыхайте 5 минут. После 4 таких циклов сделайте большой перерыв на 15-30 минут. Мозг не перегружается, и вы успеваете больше.</p>
+        </div>
+
+        <div class="method-card" onclick="toggleMethod(this)">
+            <h3>🧑‍🏫 Метод Фейнмана <span>▼</span></h3>
+            <p>Возьмите тему и попробуйте объяснить её простыми словами (как будто вы учитель, а рядом ребенок). Если вы где-то запнулись — значит, вы этого не понимаете. Вернитесь в учебник и повторите этот кусок.</p>
+        </div>
+
+        <div class="method-card" onclick="toggleMethod(this)">
+            <h3>⏳ Интервальное повторение <span>▼</span></h3>
+            <p>Не учите всё за один день перед экзаменом. Повторите тему через 1 день, потом через 3 дня, потом через 7 дней. Так информация переходит в долговременную память.</p>
+        </div>
+
+        <div class="method-card" onclick="toggleMethod(this)">
+            <h3>🧠 Активное вспоминание <span>▼</span></h3>
+            <p>Перечитывание учебника создает иллюзию знаний. Вместо этого закройте книгу и попробуйте на листке бумаги написать всё, что помните по теме. Это самый эффективный способ подготовки к ЕГЭ/ОГЭ.</p>
+        </div>
+    </div>
+
     <!-- НИЖНЯЯ НАВИГАЦИЯ -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="openScreen('tasks', this)">
@@ -181,6 +224,10 @@
         <div class="nav-item" onclick="openScreen('stats', this)">
             <span class="nav-icon">📊</span>
             <span>Статистика</span>
+        </div>
+        <div class="nav-item" onclick="openScreen('methods', this)">
+            <span class="nav-icon">📚</span>
+            <span>Методы</span>
         </div>
         <div class="nav-item" onclick="openScreen('stress', this)">
             <span class="nav-icon">🧘</span>
@@ -209,19 +256,14 @@
 
         // --- НАВИГАЦИЯ ПО ЭКРАНАМ ---
         function openScreen(screenName, navElement) {
-            // Скрываем все экраны
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            // Показываем нужный
             document.getElementById('screen-' + screenName).classList.add('active');
             
-            // Меняем активную кнопку внизу
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             navElement.classList.add('active');
 
-            // Обновляем статистику при переходе на нее
             if (screenName === 'stats') updateStats();
             
-            // Вибрация
             if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
         }
 
@@ -385,6 +427,12 @@
             }, 4000);
         }
 
+        // --- РАСКРЫВАЮЩИЕСЯ КАРТОЧКИ МЕТОДОВ ---
+        function toggleMethod(card) {
+            card.classList.toggle('open');
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
         // Слушатели
         addBtn.addEventListener('click', addTask);
         taskInput.addEventListener('keypress', (e) => {
@@ -397,4 +445,3 @@
     </script>
 </body>
 </html>
-            

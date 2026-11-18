@@ -45,12 +45,13 @@
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 { font-size: 32px; font-weight: 800; margin: 10px 0 20px 0; letter-spacing: -1px; }
-        h2 { font-size: 24px; font-weight: 700; margin: 0 0 15px 0; letter-spacing: -0.5px; text-align: center; }
+        /* Уменьшили размеры заголовков для аккуратности */
+        h1 { font-size: 28px; font-weight: 800; margin: 10px 0 15px 0; letter-spacing: -1px; }
+        h2 { font-size: 22px; font-weight: 700; margin: 0 0 15px 0; letter-spacing: -0.5px; text-align: center; }
 
         /* --- СТАРТОВЫЙ ЭКРАН --- */
         .start-content { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; }
-        .start-title { font-size: 36px; font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -1px; }
+        .start-title { font-size: 32px; font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -1px; }
         .start-subtitle { color: var(--hint-color); font-size: 16px; margin-bottom: 40px; max-width: 80%; }
         .start-btn { background: var(--button-color); color: var(--button-text-color); border: none; padding: 16px 32px; border-radius: 30px; font-size: 18px; font-weight: 600; cursor: pointer; width: 80%; transition: transform 0.1s; }
         .start-btn:active { transform: scale(0.95); }
@@ -157,7 +158,7 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 1: ЗАДАЧИ (БЕЗ НАСТРОЕНИЯ) -->
+    <!-- ЭКРАН 1: ЗАДАЧИ -->
     <div id="screen-tasks" class="screen">
         <h1>Мой день</h1>
         <div class="tabs">
@@ -235,7 +236,7 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 3: МЕТОДЫ (С ТАЙМЕРОМ) -->
+    <!-- ЭКРАН 3: МЕТОДЫ -->
     <div id="screen-methods" class="screen">
         <h1>Методы</h1>
         
@@ -278,7 +279,7 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 4: АНТИ-СТРЕСС (ВИЗУАЛЬНЫЙ ТАЙМЕР) -->
+    <!-- ЭКРАН 4: АНТИ-СТРЕСС -->
     <div id="screen-stress" class="screen">
         <h1>Анти-стресс</h1>
         <div class="card">
@@ -324,7 +325,12 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); tg.ready();
+        tg.expand(); 
+        tg.ready();
+
+        // МАГИЯ: Опускаем контент вниз, чтобы кнопки Telegram не перекрывали текст
+        const safeTop = tg.viewportStableHeight ? (window.innerHeight - tg.viewportStableHeight) : 0;
+        document.body.style.paddingTop = `${safeTop + 10}px`;
 
         // --- СОСТОЯНИЕ ---
         let tasks = JSON.parse(localStorage.getItem('tg_tasks_v2')) || [];
@@ -336,7 +342,7 @@
         let diaryMood = 0;
 
         // Таймеры
-        let timers = {}; // Объект для хранения интервалов
+        let timers = {}; 
 
         // --- НАВИГАЦИЯ ---
         function startApp() {
@@ -516,18 +522,13 @@
             const display = document.getElementById(id + '-display');
             
             if (timers[id] && timers[id].running) {
-                // Остановка
                 clearInterval(timers[id].interval);
                 timers[id].running = false;
                 btn.textContent = 'Старт';
                 btn.classList.remove('stop');
                 display.style.color = 'var(--text-color)';
             } else {
-                // Запуск
-                if (!timers[id]) {
-                    timers[id] = { timeLeft: minutes * 60, running: false, interval: null };
-                }
-                
+                if (!timers[id]) { timers[id] = { timeLeft: minutes * 60, running: false, interval: null }; }
                 if (timers[id].timeLeft <= 0) timers[id].timeLeft = minutes * 60;
                 
                 timers[id].running = true;
@@ -556,7 +557,7 @@
             if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // --- ДЫХАНИЕ (ВИЗУАЛЬНОЕ) ---
+        // --- ДЫХАНИЕ ---
         let breathInterval = null;
         function startVisualBreathing() {
             const box = document.getElementById('breath-box');
@@ -565,17 +566,15 @@
             const startBtn = document.getElementById('breath-start-btn');
 
             if (box.classList.contains('active')) {
-                // Остановка
                 box.classList.remove('active');
                 startBtn.textContent = 'Начать дыхание';
                 clearInterval(breathInterval);
                 return;
             }
 
-            // Запуск
             box.classList.add('active');
             startBtn.textContent = 'Остановить';
-            let cycle = 0; // 0 - вдох, 1 - задержка, 2 - выдох, 3 - задержка
+            let cycle = 0; 
             
             const updateText = () => {
                 if (cycle === 0) { text.textContent = "Вдох"; text.style.color = "var(--success-color)"; sub.textContent = "Наполните легкие"; }
